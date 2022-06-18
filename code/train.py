@@ -28,7 +28,7 @@ parser.add_argument('--n_workers', type=int, default=8)
 
 args = parser.parse_args()
 
-if not os.path.isdir("./outputs"):
+if not os.path.isdir("/content/drive/MyDrive/kaggle/AI4Code/output"):
     os.mkdir("./outputs")
     
 data_dir = Path('/content/data')
