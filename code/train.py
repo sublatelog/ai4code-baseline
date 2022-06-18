@@ -28,8 +28,8 @@ parser.add_argument('--n_workers', type=int, default=8)
 
 args = parser.parse_args()
 
-if not os.path.isdir("/content/drive/MyDrive/kaggle/AI4Code/output"):
-    os.mkdir("./outputs")
+# if not os.path.isdir("./outputs"):
+#     os.mkdir("./outputs")
     
 data_dir = Path('/content/data')
 
@@ -133,7 +133,7 @@ def train(model, train_loader, val_loader, epochs):
         val_df.loc[val_df["cell_type"] == "markdown", "pred"] = y_pred
         y_dummy = val_df.sort_values("pred").groupby('id')['cell_id'].apply(list)
         print("Preds score", kendall_tau(df_orders.loc[y_dummy.index], y_dummy))
-        torch.save(model.state_dict(), "./outputs/model.bin")
+        torch.save(model.state_dict(), "/content/drive/MyDrive/kaggle/AI4Code/output/model.bin")
 
     return model, y_pred
 
