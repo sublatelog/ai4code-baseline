@@ -16,7 +16,7 @@ parser.add_argument('--model_name_or_path', type=str, default='microsoft/codeber
 parser.add_argument('--train_mark_path', type=str, default='./data/train_df_mark.csv')
 parser.add_argument('--train_features_path', type=str, default='./data/train_fts.json')
 parser.add_argument('--val_mark_path', type=str, default='./data/val_df_mark.csv')
-parser.add_argument('--val_features_path', type=str, default='./data/val_fts.csv')
+parser.add_argument('--val_features_path', type=str, default='./data/val_fts.json')
 parser.add_argument('--val_path', type=str, default="./data/val_df.csv")
 
 parser.add_argument('--md_max_len', type=int, default=64)
