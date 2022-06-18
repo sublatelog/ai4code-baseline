@@ -27,7 +27,10 @@ parser.add_argument('--epochs', type=int, default=5)
 parser.add_argument('--n_workers', type=int, default=8)
 
 args = parser.parse_args()
-os.mkdir("./outputs")
+
+if not os.path.isdir("./outputs"):
+    os.mkdir("./outputs")
+    
 data_dir = Path('..//input/')
 
 train_df_mark = pd.read_csv(args.train_mark_path).drop("parent_id", axis=1).dropna().reset_index(drop=True)
