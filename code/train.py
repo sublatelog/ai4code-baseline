@@ -96,7 +96,8 @@ def train(model, train_loader, val_loader, epochs):
                       lr=9e-4, # 9e-5, # 3e-5,
                       correct_bias=False
                      )  # To reproduce BertAdam specific behavior set correct_bias=False
-    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0.05 * num_train_optimization_steps,
+    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0.1 * num_train_optimization_steps,
+#     scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0.05 * num_train_optimization_steps,
                                                 num_training_steps=num_train_optimization_steps)  # PyTorch scheduler
 
     criterion = torch.nn.L1Loss()
