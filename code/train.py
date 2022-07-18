@@ -136,7 +136,20 @@ def train(model, train_loader, val_loader, epochs):
         val_df.loc[val_df["cell_type"] == "markdown", "pred"] = y_pred
         y_dummy = val_df.sort_values("pred").groupby('id')['cell_id'].apply(list)
         print("Preds score", kendall_tau(df_orders.loc[y_dummy.index], y_dummy))
-        torch.save(model.state_dict(), "/content/drive/MyDrive/kaggle/AI4Code/output/model.bin")
+        
+        # save
+        # torch.save(model.state_dict(), "/content/drive/MyDrive/kaggle/AI4Code/output/model.bin")
+
+        # 保存
+        save_path = "/content/drive/MyDrive/kaggle/AI4Code/output/CodeBERT_training_state.pt"
+        torch.save({'epoch': e,
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                    'loss': avg_loss,
+                    'scaler': scaler.state_dict(),
+                    'scheduler': scheduler.state_dict(),
+                   },
+                   save_path)
 
     return model, y_pred
 
