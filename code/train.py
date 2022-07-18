@@ -11,6 +11,9 @@ from metrics import *
 import torch
 import argparse
 
+import wandb
+wandb.init(project="ai4code_baseline", entity="sublate")
+
 parser = argparse.ArgumentParser(description='Process some arguments')
 parser.add_argument('--model_name_or_path', type=str, default='microsoft/codebert-base')
 parser.add_argument('--train_mark_path', type=str, default='./data/train_df_mark.csv')
@@ -81,7 +84,7 @@ def validate(model, val_loader):
     return np.concatenate(labels), np.concatenate(preds)
 
 
-def train(model, train_loader, val_loader, epochs):
+def train(model, train_loader, val_loader, epochs, wandb):
     np.random.seed(0)
     # Creating optimizer and lr schedulers
     param_optimizer = list(model.named_parameters())
@@ -130,12 +133,20 @@ def train(model, train_loader, val_loader, epochs):
             avg_loss = np.round(np.mean(loss_list), 4)
 
             tbar.set_description(f"Epoch {e + 1} Loss: {avg_loss} lr: {scheduler.get_last_lr()}")
+            
 
         y_val, y_pred = validate(model, val_loader)
         val_df["pred"] = val_df.groupby(["id", "cell_type"])["rank"].rank(pct=True)
         val_df.loc[val_df["cell_type"] == "markdown", "pred"] = y_pred
         y_dummy = val_df.sort_values("pred").groupby('id')['cell_id'].apply(list)
         print("Preds score", kendall_tau(df_orders.loc[y_dummy.index], y_dummy))
+        
+        # wandb
+        wandb.log({'Loss': avg_loss,
+                   'lr': scheduler.get_last_lr(),          
+                   'score': kendall_tau(df_orders.loc[y_dummy.index], y_dummy),           
+                  })
+        
         
         # save
         # torch.save(model.state_dict(), "/content/drive/MyDrive/kaggle/AI4Code/output/model.bin")
@@ -156,4 +167,4 @@ def train(model, train_loader, val_loader, epochs):
 
 model = MarkdownModel(args.model_name_or_path)
 model = model.cuda()
-model, y_pred = train(model, train_loader, val_loader, epochs=args.epochs)
+model, y_pred = train(model, train_loader, val_loader, epochs=args.epochs, wandb)
