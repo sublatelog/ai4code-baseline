@@ -84,7 +84,7 @@ def validate(model, val_loader):
     return np.concatenate(labels), np.concatenate(preds)
 
 
-def train(model, train_loader, val_loader, epochs, wandb):
+def train(model, train_loader, val_loader, wandb, epochs):
     np.random.seed(0)
     # Creating optimizer and lr schedulers
     param_optimizer = list(model.named_parameters())
@@ -167,4 +167,4 @@ def train(model, train_loader, val_loader, epochs, wandb):
 
 model = MarkdownModel(args.model_name_or_path)
 model = model.cuda()
-model, y_pred = train(model, train_loader, val_loader, epochs=args.epochs, wandb)
+model, y_pred = train(model, train_loader, val_loader, wandb, epochs=args.epochs)
