@@ -29,6 +29,9 @@ parser.add_argument('--accumulation_steps', type=int, default=4)
 parser.add_argument('--epochs', type=int, default=5)
 parser.add_argument('--n_workers', type=int, default=8)
 
+parser.add_argument('--load_model', type=int, default=8)
+parser.add_argument('--load_model', action='store_true')
+
 args = parser.parse_args()
 
 # if not os.path.isdir("./outputs"):
