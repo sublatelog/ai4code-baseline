@@ -109,18 +109,18 @@ def train(model, train_loader, val_loader, wandb, epochs):
     criterion = torch.nn.L1Loss()
     scaler = torch.cuda.amp.GradScaler()
     
-    
-    # load checkpoint
-    save_path = "/content/drive/MyDrive/kaggle/AI4Code/output/CodeBERT_training_state.pt"
-    checkpoint = torch.load(save_path)
-    model.load_state_dict(checkpoint['model_state_dict'])
-    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    for state in optimizer.state.values():
-        for k, v in state.items():
-            if isinstance(v, torch.Tensor):
-                state[k] = v.cuda() # .to(device)
-    epoch = checkpoint['epoch']
-    loss = checkpoint['loss']
+    if args.load_model == True:
+        # load checkpoint
+        save_path = "/content/drive/MyDrive/kaggle/AI4Code/output/CodeBERT_training_state.pt"
+        checkpoint = torch.load(save_path)
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        for state in optimizer.state.values():
+            for k, v in state.items():
+                if isinstance(v, torch.Tensor):
+                    state[k] = v.cuda() # .to(device)
+        epoch = checkpoint['epoch']
+        loss = checkpoint['loss']
     
 
     
