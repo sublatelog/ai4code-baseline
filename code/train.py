@@ -115,7 +115,7 @@ def train(model, train_loader, val_loader, wandb, epochs):
     for state in optimizer.state.values():
         for k, v in state.items():
             if isinstance(v, torch.Tensor):
-                state[k] = v.to(device)
+                state[k] = v.cuda() # .to(device)
     epoch = checkpoint['epoch']
     loss = checkpoint['loss']
     
