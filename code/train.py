@@ -107,6 +107,7 @@ def train(model, train_loader, val_loader, wandb, epochs):
 
     criterion = torch.nn.L1Loss()
     scaler = torch.cuda.amp.GradScaler()
+    epoch = 0
     
     if args.load_model == True:
         # load checkpoint
