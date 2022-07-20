@@ -105,8 +105,23 @@ def train(model, train_loader, val_loader, wandb, epochs):
 
     criterion = torch.nn.L1Loss()
     scaler = torch.cuda.amp.GradScaler()
+    
+    
+    # load checkpoint
+    save_path = "/content/drive/MyDrive/kaggle/AI4Code/output/CodeBERT_training_state.pt"
+    checkpoint = torch.load(save_path)
+    model.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    for state in optimizer.state.values():
+        for k, v in state.items():
+            if isinstance(v, torch.Tensor):
+                state[k] = v.to(device)
+    epoch = checkpoint['epoch']
+    loss = checkpoint['loss']
+    
 
-    for e in range(epochs):
+    
+    for e in range(epoch, epochs):
         model.train()
         tbar = tqdm(train_loader, file=sys.stdout)
         loss_list = []
@@ -151,8 +166,7 @@ def train(model, train_loader, val_loader, wandb, epochs):
         # save
         # torch.save(model.state_dict(), "/content/drive/MyDrive/kaggle/AI4Code/output/model.bin")
 
-        # 保存
-        save_path = "/content/drive/MyDrive/kaggle/AI4Code/output/CodeBERT_training_state.pt"
+        # 保存        
         torch.save({'epoch': e,
                     'model_state_dict': model.state_dict(),
                     'optimizer_state_dict': optimizer.state_dict(),
