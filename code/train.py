@@ -107,11 +107,13 @@ def train(model, train_loader, val_loader, wandb, epochs):
 
     criterion = torch.nn.L1Loss()
     scaler = torch.cuda.amp.GradScaler()
-    epoch = 0
     
-    if args.load_model == True:
-        # load checkpoint
-        save_path = "/content/drive/MyDrive/kaggle/AI4Code/output/CodeBERT_training_state.pt"
+    
+    # load checkpoint   
+    epoch = 0    
+    save_path = "/content/drive/MyDrive/kaggle/AI4Code/output/CodeBERT_training_state.pt"
+    
+    if args.load_model == True:             
         checkpoint = torch.load(save_path)
         model.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
