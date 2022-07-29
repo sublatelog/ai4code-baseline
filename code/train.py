@@ -166,14 +166,17 @@ def train(model, train_loader, val_loader, wandb, epochs):
             val_df.loc[val_df["cell_type"] == "markdown", "pred"] = y_pred
             y_dummy = val_df.sort_values("pred").groupby('id')['cell_id'].apply(list)
             print("Preds score", kendall_tau(df_orders.loc[y_dummy.index], y_dummy))
+            score = kendall_tau(df_orders.loc[y_dummy.index], y_dummy)
+            
         else:
             print("y_pred:",len(y_pred))
             print("val_df:",val_df.loc[val_df["cell_type"] == "markdown", "pred"].shape)
+            score = 0
         
         # wandb
         wandb.log({'Loss': avg_loss,
                    'lr': scheduler.get_last_lr(),          
-                   'score': kendall_tau(df_orders.loc[y_dummy.index], y_dummy),           
+                   'score': score,           
                   })
         
         
